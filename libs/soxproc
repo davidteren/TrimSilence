@@ -1,0 +1,33 @@
+#!/bin/sh
+
+set -e
+
+PATH=${PATH}:/usr/local/bin:/opt/local/bin
+SOXCMD="silence 1 0.01 0.1% reverse silence 1 0.01 0.1% reverse pad 0 1"
+DIR="${1}"
+FMT=${2}
+
+shift 2
+if [ -n "${1}" ]
+then
+	SOXCMD="${*}"
+fi
+
+cd "${DIR}"
+mkdir -p temp
+find -E . -type f -regex '^.*\.(wav|mp3|aif)$' >/tmp/find.out
+
+while read INPUT
+do
+	OUTPUT="temp/${INPUT%.*}.${FMT}"
+	sox "${INPUT}" "${OUTPUT}" ${SOXCMD}
+done </tmp/find.out
+
+while read INPUT
+do
+	rm "${INPUT}"
+done </tmp/find.out
+
+cd "${DIR}/temp"
+mv * ../
+cd .. && rmdir temp
