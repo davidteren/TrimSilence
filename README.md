@@ -11,8 +11,7 @@ Requirements
 
 Ideally you'll want to install [Homebrew](http://brew.sh/) & run
 
-> brew install sox
-> brew install lame
+> brew install sox && brew install lame
 
 License
 ----
